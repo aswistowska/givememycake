@@ -1,6 +1,7 @@
 package org.swistowski.agata.givememycake;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +37,8 @@ public class RecipeListActivity extends AppCompatActivity implements RecipesAdap
     @Override
     public void onClick(Recipe clickedRecipe) {
         Context context = this;
-        Toast.makeText(context, clickedRecipe.getName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, StepListActivity.class);
+        intent.putExtra("recipe", clickedRecipe);
+        startActivity(intent);
     }
 }
