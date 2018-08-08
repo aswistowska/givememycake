@@ -7,6 +7,8 @@ public class Recipe implements java.io.Serializable {
     private final int id;
     private final String name;
     private final List<Ingredient> ingredients;
+
+
     private final List<Step> steps;
 
     public Recipe(int id, String name, List<Ingredient> ingredients, List<Step> steps){
@@ -18,5 +20,19 @@ public class Recipe implements java.io.Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
+    }
+
+    public Step getStepById(int stepId) {
+        for(int i = 0; i < getSteps().size(); i++) {
+            Step currentStep = getSteps().get(i);
+            if(currentStep.getId() == stepId) {
+                return currentStep;
+            }
+        }
+        return null;
     }
 }
