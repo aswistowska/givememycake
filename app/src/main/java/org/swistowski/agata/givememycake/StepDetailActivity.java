@@ -76,11 +76,11 @@ public class StepDetailActivity extends AppCompatActivity {
 
             Button prevButton = findViewById(R.id.previous_button);
             final int currentStep = mRecipe.getSteps().indexOf(mStep);
-            if(currentStep == 0) {
+            if(currentStep == 0 || stepId == -1) {
                 prevButton.setVisibility(View.INVISIBLE);
             }
             Button nextButton = findViewById(R.id.next_button);
-            if(currentStep == mRecipe.getSteps().size()-1){
+            if(currentStep == mRecipe.getSteps().size()-1 || stepId == -1){
                 nextButton.setVisibility(View.INVISIBLE);
             }
 
