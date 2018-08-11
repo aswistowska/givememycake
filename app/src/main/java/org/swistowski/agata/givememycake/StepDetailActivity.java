@@ -1,5 +1,6 @@
 package org.swistowski.agata.givememycake;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,8 +10,10 @@ import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import org.swistowski.agata.givememycake.model.Recipe;
+import org.swistowski.agata.givememycake.model.Step;
 
 /**
  * An activity representing a single Step detail screen. This
@@ -21,6 +24,7 @@ import org.swistowski.agata.givememycake.model.Recipe;
 public class StepDetailActivity extends AppCompatActivity {
 
     private Recipe mRecipe;
+    private Step mStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,7 @@ public class StepDetailActivity extends AppCompatActivity {
             // using a fragment transaction.
             int stepId = getIntent().getIntExtra(StepDetailFragment.ARG_STEP_ID, 0);
             mRecipe = (Recipe) getIntent().getSerializableExtra(StepDetailFragment.ARG_RECIPE);
+            mStep = mRecipe.getStepById(stepId);
 
             if(stepId == -1){
                 IngredientsFragment fragment = IngredientsFragment.newInstance(mRecipe);
@@ -68,7 +73,41 @@ public class StepDetailActivity extends AppCompatActivity {
                         .add(R.id.step_detail_container, fragment)
                         .commit();
             }
+
+            Button prevButton = findViewById(R.id.previous_button);
+            final int currentStep = mRecipe.getSteps().indexOf(mStep);
+            if(currentStep == 0) {
+                prevButton.setVisibility(View.INVISIBLE);
+            }
+            Button nextButton = findViewById(R.id.next_button);
+            if(currentStep == mRecipe.getSteps().size()-1){
+                nextButton.setVisibility(View.INVISIBLE);
+            }
+
+            prevButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showStep(currentStep - 1);
+                }
+            });
+
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showStep(currentStep + 1);
+                }
+            });
         }
+    }
+
+    private void showStep(int stepToShow){
+        Context context = this;
+        Step step = mRecipe.getSteps().get(stepToShow);
+        Intent intent = new Intent(context, StepDetailActivity.class);
+        intent.putExtra(StepDetailFragment.ARG_RECIPE, mRecipe);
+        intent.putExtra(StepDetailFragment.ARG_STEP_ID, step.getId());
+
+        context.startActivity(intent);
     }
 
     @Override
@@ -87,5 +126,12 @@ public class StepDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, StepListActivity.class);
+        intent.putExtra("recipe", mRecipe);
+        navigateUpTo(intent);
     }
 }
