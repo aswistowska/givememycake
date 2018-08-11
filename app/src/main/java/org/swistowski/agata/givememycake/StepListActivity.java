@@ -112,14 +112,21 @@ public class StepListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 RecipeItem item = (RecipeItem) view.getTag();
                 if (mTwoPane) {
-                    Bundle arguments = new Bundle();
-                    arguments.putSerializable(StepDetailFragment.ARG_RECIPE, mRecipe);
-                    arguments.putInt(StepDetailFragment.ARG_STEP_ID, item.getStepId());
-                    StepDetailFragment fragment = new StepDetailFragment();
-                    fragment.setArguments(arguments);
-                    mParentActivity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.step_detail_container, fragment)
-                            .commit();
+                    if(item.getStepId() == -1) {
+                        IngredientsFragment fragment = IngredientsFragment.newInstance(mRecipe);
+                        mParentActivity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.step_detail_container, fragment)
+                                .commit();
+                    } else {
+                        Bundle arguments = new Bundle();
+                        arguments.putSerializable(StepDetailFragment.ARG_RECIPE, mRecipe);
+                        arguments.putInt(StepDetailFragment.ARG_STEP_ID, item.getStepId());
+                        StepDetailFragment fragment = new StepDetailFragment();
+                        fragment.setArguments(arguments);
+                        mParentActivity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.step_detail_container, fragment)
+                                .commit();
+                    }
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, StepDetailActivity.class);

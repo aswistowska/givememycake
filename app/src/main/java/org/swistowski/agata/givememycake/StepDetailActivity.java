@@ -47,18 +47,27 @@ public class StepDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Bundle arguments = new Bundle();
+            int stepId = getIntent().getIntExtra(StepDetailFragment.ARG_STEP_ID, 0);
             mRecipe = (Recipe) getIntent().getSerializableExtra(StepDetailFragment.ARG_RECIPE);
 
-            arguments.putSerializable(StepDetailFragment.ARG_RECIPE, mRecipe);
-            arguments.putInt(StepDetailFragment.ARG_STEP_ID,
-                    getIntent().getIntExtra(StepDetailFragment.ARG_STEP_ID, 0));
+            if(stepId == -1){
+                IngredientsFragment fragment = IngredientsFragment.newInstance(mRecipe);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.step_detail_container, fragment)
+                        .commit();
 
-            StepDetailFragment fragment = new StepDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.step_detail_container, fragment)
-                    .commit();
+            } else {
+                Bundle arguments = new Bundle();
+
+                arguments.putSerializable(StepDetailFragment.ARG_RECIPE, mRecipe);
+                arguments.putInt(StepDetailFragment.ARG_STEP_ID, stepId);
+
+                StepDetailFragment fragment = new StepDetailFragment();
+                fragment.setArguments(arguments);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.step_detail_container, fragment)
+                        .commit();
+            }
         }
     }
 

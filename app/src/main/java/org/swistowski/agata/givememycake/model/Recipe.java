@@ -35,4 +35,9 @@ public class Recipe implements java.io.Serializable {
         }
         return null;
     }
+
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
 }

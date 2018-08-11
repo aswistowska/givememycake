@@ -74,7 +74,7 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
-    private void initializePlayer(Uri video) {
+    private void initializePlayer() {
         if (mExoPlayer == null) {
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
@@ -83,16 +83,22 @@ public class StepDetailFragment extends Fragment {
             mPlayerView.setPlayer(mExoPlayer);
             // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(getContext(), "GiveMeMyCake");
-            MediaSource mediaSource = new ExtractorMediaSource(video, new DefaultDataSourceFactory(
-                    getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
-            mExoPlayer.prepare(mediaSource);
+
+            if(mStep.getVideo() != null) {
+                Uri video = Uri.parse(mStep.getVideo().toString());
+                MediaSource mediaSource = new ExtractorMediaSource(video, new DefaultDataSourceFactory(
+                        getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
+                mExoPlayer.prepare(mediaSource);
+            }
         }
     }
 
     private void releasePlayer() {
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+        if(mExoPlayer != null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
 
@@ -108,9 +114,7 @@ public class StepDetailFragment extends Fragment {
         mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
         mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
                 (getResources(), R.drawable.video_placeholder));
-        if(mStep.getVideo() != null) {
-            initializePlayer(Uri.parse(mStep.getVideo().toString()));
-        }
+            initializePlayer();
 
         return rootView;
     }

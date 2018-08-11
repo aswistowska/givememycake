@@ -12,4 +12,17 @@ public class Ingredient implements java.io.Serializable {
         this.measure = measure;
         this.name = name;
     }
+
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public String getMeasure() {
+        return measure;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 }
