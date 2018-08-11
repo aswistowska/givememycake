@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:minHeight="180dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/recipe_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:src="@drawable/cake1" />
+
     <TextView
         android:id="@+id/recipe_name_text_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        tools:text="@string/random_text"
+        android:textColor="@color/colorTriadicPurple"
+        android:textStyle="bold"/>
 
-</android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

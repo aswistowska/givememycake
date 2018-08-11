@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
+import org.swistowski.agata.givememycake.model.Recipe;
+
 /**
  * An activity representing a single Step detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
@@ -17,6 +19,8 @@ import android.view.MenuItem;
  * in a {@link StepListActivity}.
  */
 public class StepDetailActivity extends AppCompatActivity {
+
+    private Recipe mRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +48,9 @@ public class StepDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putSerializable(StepDetailFragment.ARG_RECIPE,
-                    getIntent().getSerializableExtra(StepDetailFragment.ARG_RECIPE));
+            mRecipe = (Recipe) getIntent().getSerializableExtra(StepDetailFragment.ARG_RECIPE);
+
+            arguments.putSerializable(StepDetailFragment.ARG_RECIPE, mRecipe);
             arguments.putInt(StepDetailFragment.ARG_STEP_ID,
                     getIntent().getIntExtra(StepDetailFragment.ARG_STEP_ID, 0));
 
@@ -67,7 +72,9 @@ public class StepDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(new Intent(this, StepListActivity.class));
+            Intent intent = new Intent(this, StepListActivity.class);
+            intent.putExtra("recipe", mRecipe);
+            navigateUpTo(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
