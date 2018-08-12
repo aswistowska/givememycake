@@ -3,7 +3,13 @@ package org.swistowski.agata.givememycake;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
+
+import org.swistowski.agata.givememycake.model.Recipe;
+import org.swistowski.agata.givememycake.utils.JsonUtils;
+
+import java.util.List;
 
 /**
  * Implementation of App Widget functionality.
@@ -14,10 +20,15 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = IngredientsWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
+        int recipeId = IngredientsWidgetProviderConfigureActivity.loadRecipePref(context, appWidgetId);
+
+
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget_provider);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
+        //views.setTextViewText(R.id.appwidget_text, Integer.toString(recipeId));
+        Intent intent = new Intent(context, IngredientsViewService.class);
+        intent.putExtra("recipe_id", recipeId);
+        views.setRemoteAdapter(R.id.ingredients_widget_list_view, intent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -35,7 +46,7 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         // When the user deletes the widget, delete the preference associated with it.
         for (int appWidgetId : appWidgetIds) {
-            IngredientsWidgetProviderConfigureActivity.deleteTitlePref(context, appWidgetId);
+            IngredientsWidgetProviderConfigureActivity.deleteRecipePref(context, appWidgetId);
         }
     }
 

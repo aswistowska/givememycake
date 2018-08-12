@@ -7,7 +7,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import org.swistowski.agata.givememycake.adapters.RecipeSelectAdapter;
+import org.swistowski.agata.givememycake.model.Recipe;
+import org.swistowski.agata.givememycake.utils.JsonUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The configuration screen for the {@link IngredientsWidgetProvider IngredientsWidgetProvider} AppWidget.
@@ -16,15 +24,15 @@ public class IngredientsWidgetProviderConfigureActivity extends Activity {
 
     private static final String PREFS_NAME = "org.swistowski.agata.givememycake.IngredientsWidgetProvider";
     private static final String PREF_PREFIX_KEY = "appwidget_";
+    private Spinner mSpiner;
+    ArrayAdapter<Recipe> mAdapter;
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    EditText mAppWidgetText;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = IngredientsWidgetProviderConfigureActivity.this;
 
-            // When the button is clicked, store the string locally
-            String widgetText = mAppWidgetText.getText().toString();
-            saveTitlePref(context, mAppWidgetId, widgetText);
+            Recipe recipe = (Recipe) mSpiner.getSelectedItem();
+            saveRecipePref(context, mAppWidgetId, recipe.getId());
 
             // It is the responsibility of the configuration activity to update the app widget
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -43,25 +51,21 @@ public class IngredientsWidgetProviderConfigureActivity extends Activity {
     }
 
     // Write the prefix to the SharedPreferences object for this widget
-    static void saveTitlePref(Context context, int appWidgetId, String text) {
+    static void saveRecipePref(Context context, int appWidgetId, int recipeId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
+        prefs.putInt(PREF_PREFIX_KEY + appWidgetId, recipeId);
         prefs.apply();
     }
 
     // Read the prefix from the SharedPreferences object for this widget.
     // If there is no preference saved, get the default from a resource
-    static String loadTitlePref(Context context, int appWidgetId) {
+    static int loadRecipePref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null);
-        if (titleValue != null) {
-            return titleValue;
-        } else {
-            return context.getString(R.string.appwidget_text);
-        }
+        int recipeId = prefs.getInt(PREF_PREFIX_KEY + appWidgetId, -1);
+        return recipeId;
     }
 
-    static void deleteTitlePref(Context context, int appWidgetId) {
+    static void deleteRecipePref(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.remove(PREF_PREFIX_KEY + appWidgetId);
         prefs.apply();
@@ -76,7 +80,6 @@ public class IngredientsWidgetProviderConfigureActivity extends Activity {
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.ingredients_widget_provider_configure);
-        mAppWidgetText = (EditText) findViewById(R.id.appwidget_text);
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 
         // Find the widget id from the intent.
@@ -93,7 +96,16 @@ public class IngredientsWidgetProviderConfigureActivity extends Activity {
             return;
         }
 
-        mAppWidgetText.setText(loadTitlePref(IngredientsWidgetProviderConfigureActivity.this, mAppWidgetId));
+        mSpiner = findViewById(R.id.recipe_spinner);
+        List<Recipe> recipeList = JsonUtils.parseRecipeJson(getResources().getString(R.string.recipesJson));
+
+        mAdapter = new RecipeSelectAdapter(this, recipeList);
+
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpiner.setAdapter(mAdapter);
+
+        //mSpiner.setSelection(adapter.getPosition( ))
+        //mAppWidgetText.setText(loadTitlePref(IngredientsWidgetProviderConfigureActivity.this, mAppWidgetId));
     }
 }
 
