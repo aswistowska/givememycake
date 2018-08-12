@@ -1,8 +1,12 @@
 package org.swistowski.agata.givememycake.utils;
 
+import android.content.Context;
+import android.support.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.swistowski.agata.givememycake.R;
 import org.swistowski.agata.givememycake.model.Ingredient;
 import org.swistowski.agata.givememycake.model.Recipe;
 import org.swistowski.agata.givememycake.model.Step;
@@ -67,5 +71,17 @@ public class JsonUtils {
         }
 
         return recipes;
+    }
+
+    @Nullable
+    static public Recipe findRecipe(Context context, int recipeId) {
+        List<Recipe> recipeList = JsonUtils.parseRecipeJson(context.getResources().getString(R.string.recipesJson));
+        for (int i = 0; i < recipeList.size(); i++){
+            Recipe currentRecipe = recipeList.get(i);
+            if(currentRecipe.getId() == recipeId) {
+                return currentRecipe;
+            }
+        }
+        return null;
     }
 }

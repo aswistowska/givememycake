@@ -1,15 +1,14 @@
-package org.swistowski.agata.givememycake;
+package org.swistowski.agata.givememycake.activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.widget.Toast;
 
+import org.swistowski.agata.givememycake.R;
 import org.swistowski.agata.givememycake.adapters.RecipesAdapter;
 import org.swistowski.agata.givememycake.helpers.GridSpacingItemDecoration;
 import org.swistowski.agata.givememycake.model.Recipe;

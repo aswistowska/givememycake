@@ -1,8 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
-    android:padding="@dimen/widget_margin">
+    android:background="@color/colorTextIcons"
+    android:padding="@dimen/widget_margin"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/widget_recipe_name_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textSize="24sp"
+        android:textStyle="italic"
+        android:textColor="@color/colorPrimary"/>
 
     <ListView
         android:id="@+id/ingredients_widget_list_view"
@@ -11,4 +21,4 @@
 
     </ListView>
 
-</RelativeLayout>
+</LinearLayout>

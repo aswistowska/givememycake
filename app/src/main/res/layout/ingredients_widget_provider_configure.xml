@@ -9,13 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="@string/configure" />
+        android:text="@string/choose_a_recipe"
+        android:textColor="@color/colorSecondaryText"/>
 
     <Spinner
         android:id="@+id/recipe_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
     </Spinner>
 
     <Button
@@ -23,6 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/add_widget" />
+        android:text="@string/add_widget"
+        android:textColor="@color/colorTextIcons"
+        android:backgroundTint="@color/colorAccent"/>
 
 </LinearLayout>

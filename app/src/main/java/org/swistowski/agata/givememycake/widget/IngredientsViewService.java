@@ -1,4 +1,4 @@
-package org.swistowski.agata.givememycake;
+package org.swistowski.agata.givememycake.widget;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import org.swistowski.agata.givememycake.R;
 import org.swistowski.agata.givememycake.model.Ingredient;
 import org.swistowski.agata.givememycake.model.Recipe;
 import org.swistowski.agata.givememycake.utils.JsonUtils;
@@ -17,7 +18,7 @@ public class IngredientsViewService extends RemoteViewsService {
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
 
         int recipeId = intent.getIntExtra("recipe_id", -1);
-        final Recipe recipe = findRecipe(recipeId);
+        final Recipe recipe = JsonUtils.findRecipe(getApplicationContext(), recipeId);
 
         return new RemoteViewsFactory() {
             @Override
@@ -74,17 +75,5 @@ public class IngredientsViewService extends RemoteViewsService {
                 return true;
             }
         };
-    }
-
-    @Nullable
-    private Recipe findRecipe(int recipeId) {
-        List<Recipe> recipeList = JsonUtils.parseRecipeJson(getApplicationContext().getResources().getString(R.string.recipesJson));
-        for (int i = 0; i < recipeList.size(); i++){
-            Recipe currentRecipe = recipeList.get(i);
-            if(currentRecipe.getId() == recipeId) {
-                return currentRecipe;
-            }
-        }
-        return null;
     }
 }

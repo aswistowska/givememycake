@@ -1,4 +1,4 @@
-package org.swistowski.agata.givememycake;
+package org.swistowski.agata.givememycake.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,9 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
+import org.swistowski.agata.givememycake.fragments.IngredientsFragment;
+import org.swistowski.agata.givememycake.R;
+import org.swistowski.agata.givememycake.fragments.StepDetailFragment;
 import org.swistowski.agata.givememycake.model.Recipe;
 import org.swistowski.agata.givememycake.model.RecipeItem;
 import org.swistowski.agata.givememycake.model.Step;

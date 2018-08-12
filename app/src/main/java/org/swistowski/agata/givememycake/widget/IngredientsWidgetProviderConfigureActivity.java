@@ -1,4 +1,4 @@
-package org.swistowski.agata.givememycake;
+package org.swistowski.agata.givememycake.widget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
@@ -10,11 +10,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import org.swistowski.agata.givememycake.R;
 import org.swistowski.agata.givememycake.adapters.RecipeSelectAdapter;
 import org.swistowski.agata.givememycake.model.Recipe;
 import org.swistowski.agata.givememycake.utils.JsonUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class IngredientsWidgetProviderConfigureActivity extends Activity {
 
-    private static final String PREFS_NAME = "org.swistowski.agata.givememycake.IngredientsWidgetProvider";
+    private static final String PREFS_NAME = "org.swistowski.agata.givememycake.widget.IngredientsWidgetProvider";
     private static final String PREF_PREFIX_KEY = "appwidget_";
     private Spinner mSpiner;
     ArrayAdapter<Recipe> mAdapter;

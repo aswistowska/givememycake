@@ -1,8 +1,6 @@
-package org.swistowski.agata.givememycake;
+package org.swistowski.agata.givememycake.fragments;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -11,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -27,11 +24,11 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-import org.swistowski.agata.givememycake.dummy.DummyContent;
+import org.swistowski.agata.givememycake.R;
+import org.swistowski.agata.givememycake.activities.StepDetailActivity;
+import org.swistowski.agata.givememycake.activities.StepListActivity;
 import org.swistowski.agata.givememycake.model.Recipe;
 import org.swistowski.agata.givememycake.model.Step;
-
-import java.net.URL;
 
 /**
  * A fragment representing a single Step detail screen.

@@ -1,4 +1,4 @@
-package org.swistowski.agata.givememycake;
+package org.swistowski.agata.givememycake.fragments;
 
 
 import android.app.Activity;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import org.swistowski.agata.givememycake.R;
 import org.swistowski.agata.givememycake.adapters.IngredientsListAdapter;
 import org.swistowski.agata.givememycake.model.Recipe;
 

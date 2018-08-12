@@ -1,4 +1,4 @@
-package org.swistowski.agata.givememycake;
+package org.swistowski.agata.givememycake.widget;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -6,10 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+import org.swistowski.agata.givememycake.R;
 import org.swistowski.agata.givememycake.model.Recipe;
 import org.swistowski.agata.givememycake.utils.JsonUtils;
-
-import java.util.List;
 
 /**
  * Implementation of App Widget functionality.
@@ -21,7 +20,7 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
                                 int appWidgetId) {
 
         int recipeId = IngredientsWidgetProviderConfigureActivity.loadRecipePref(context, appWidgetId);
-
+        Recipe recipe = JsonUtils.findRecipe(context, recipeId);
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget_provider);
@@ -29,6 +28,9 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, IngredientsViewService.class);
         intent.putExtra("recipe_id", recipeId);
         views.setRemoteAdapter(R.id.ingredients_widget_list_view, intent);
+        if(recipe != null) {
+            views.setTextViewText(R.id.widget_recipe_name_text_view, recipe.getName());
+        }
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -59,5 +61,6 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
     }
+
 }
 
