@@ -3,18 +3,21 @@ package org.swistowski.agata.givememycake.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
-import org.swistowski.agata.givememycake.fragments.IngredientsFragment;
 import org.swistowski.agata.givememycake.R;
+import org.swistowski.agata.givememycake.fragments.IngredientsFragment;
 import org.swistowski.agata.givememycake.fragments.StepDetailFragment;
 import org.swistowski.agata.givememycake.model.Recipe;
 import org.swistowski.agata.givememycake.model.Step;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * An activity representing a single Step detail screen. This
@@ -26,12 +29,15 @@ public class StepDetailActivity extends AppCompatActivity {
 
     private Recipe mRecipe;
     private Step mStep;
+    @BindView(R.id.detail_toolbar) Toolbar toolbar;
+    @BindView(R.id.previous_button) Button prevButton;
+    @BindView(R.id.next_button) Button nextButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
@@ -49,14 +55,13 @@ public class StepDetailActivity extends AppCompatActivity {
         //
         // http://developer.android.com/guide/components/fragments.html
         //
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            int stepId = getIntent().getIntExtra(StepDetailFragment.ARG_STEP_ID, 0);
-            mRecipe = (Recipe) getIntent().getSerializableExtra(StepDetailFragment.ARG_RECIPE);
-            mStep = mRecipe.getStepById(stepId);
+        int stepId = getIntent().getIntExtra(StepDetailFragment.ARG_STEP_ID, 0);
+        mRecipe = (Recipe) getIntent().getSerializableExtra(StepDetailFragment.ARG_RECIPE);
+        mStep = mRecipe.getStepById(stepId);
 
-            if(stepId == -1){
+        if (savedInstanceState == null) {
+
+            if (stepId == -1) {
                 IngredientsFragment fragment = IngredientsFragment.newInstance(mRecipe);
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.step_detail_container, fragment)
@@ -75,13 +80,11 @@ public class StepDetailActivity extends AppCompatActivity {
                         .commit();
             }
 
-            Button prevButton = findViewById(R.id.previous_button);
             final int currentStep = mRecipe.getSteps().indexOf(mStep);
-            if(currentStep == 0 || stepId == -1) {
+            if (currentStep == 0 || stepId == -1) {
                 prevButton.setVisibility(View.INVISIBLE);
             }
-            Button nextButton = findViewById(R.id.next_button);
-            if(currentStep == mRecipe.getSteps().size()-1 || stepId == -1){
+            if (currentStep == mRecipe.getSteps().size() - 1 || stepId == -1) {
                 nextButton.setVisibility(View.INVISIBLE);
             }
 
@@ -101,7 +104,7 @@ public class StepDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void showStep(int stepToShow){
+    private void showStep(int stepToShow) {
         Context context = this;
         Step step = mRecipe.getSteps().get(stepToShow);
         Intent intent = new Intent(context, StepDetailActivity.class);

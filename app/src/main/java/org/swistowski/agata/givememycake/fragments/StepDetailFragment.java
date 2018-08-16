@@ -3,6 +3,7 @@ package org.swistowski.agata.givememycake.fragments;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,12 +42,13 @@ public class StepDetailFragment extends Fragment {
 
     public static final String ARG_RECIPE = "recipe";
     public static final String ARG_STEP_ID = "stepId";
-
+    private static final String PLAYBACK_POSITION = "playbackPosition";
 
     private Recipe mRecipe;
     private Step mStep;
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
+    private long mCurrentPosition = -1;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -110,19 +112,41 @@ public class StepDetailFragment extends Fragment {
         if (mStep != null) {
             ((TextView) rootView.findViewById(R.id.step_detail)).setText(mStep.getDescription());
         }
-
-        mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
-        mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
-                (getResources(), R.drawable.video_placeholder));
-            initializePlayer();
+        if (savedInstanceState != null) {
+            mCurrentPosition = savedInstanceState.getLong(PLAYBACK_POSITION);
+        }
 
         return rootView;
     }
 
+
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onResume() {
+        super.onResume();
+        mPlayerView = (SimpleExoPlayerView) getView().findViewById(R.id.playerView);
+        mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
+                (getResources(), R.drawable.video_placeholder));
+        initializePlayer();
+        if (mCurrentPosition != -1) {
+            mExoPlayer.seekTo(mCurrentPosition);
+            mExoPlayer.setPlayWhenReady(true);
+        } else {
+            mExoPlayer.setPlayWhenReady(false);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mCurrentPosition = mExoPlayer.getCurrentPosition();
         releasePlayer();
     }
 
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putLong(PLAYBACK_POSITION, mCurrentPosition);
+    }
 }

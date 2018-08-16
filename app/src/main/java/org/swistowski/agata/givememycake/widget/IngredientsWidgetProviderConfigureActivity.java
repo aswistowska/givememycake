@@ -9,13 +9,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.swistowski.agata.givememycake.R;
+import org.swistowski.agata.givememycake.activities.RecipeListActivity;
 import org.swistowski.agata.givememycake.adapters.RecipeSelectAdapter;
 import org.swistowski.agata.givememycake.model.Recipe;
-import org.swistowski.agata.givememycake.utils.JsonUtils;
+import org.swistowski.agata.givememycake.network.GetDataService;
+import org.swistowski.agata.givememycake.network.RetrofitClientInstance;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * The configuration screen for the {@link IngredientsWidgetProvider IngredientsWidgetProvider} AppWidget.
@@ -97,12 +104,22 @@ public class IngredientsWidgetProviderConfigureActivity extends Activity {
         }
 
         mSpiner = findViewById(R.id.recipe_spinner);
-        List<Recipe> recipeList = JsonUtils.parseRecipeJson(getResources().getString(R.string.recipesJson));
 
-        mAdapter = new RecipeSelectAdapter(this, recipeList);
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        Call<List<Recipe>> call = service.getAllRecipes();
+        call.enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                List<Recipe> recipesList = response.body();
+                mAdapter = new RecipeSelectAdapter(getApplicationContext(), recipesList);
+                mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mSpiner.setAdapter(mAdapter);
+            }
 
-        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpiner.setAdapter(mAdapter);
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+            }
+        });
 
         //mSpiner.setSelection(adapter.getPosition( ))
         //mAppWidgetText.setText(loadTitlePref(IngredientsWidgetProviderConfigureActivity.this, mAppWidgetId));

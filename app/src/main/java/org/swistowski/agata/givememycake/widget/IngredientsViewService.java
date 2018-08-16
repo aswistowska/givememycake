@@ -1,26 +1,28 @@
 package org.swistowski.agata.givememycake.widget;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import org.swistowski.agata.givememycake.R;
 import org.swistowski.agata.givememycake.model.Ingredient;
 import org.swistowski.agata.givememycake.model.Recipe;
-import org.swistowski.agata.givememycake.utils.JsonUtils;
+import org.swistowski.agata.givememycake.network.GetDataService;
+import org.swistowski.agata.givememycake.network.RetrofitClientInstance;
 
+import java.io.IOException;
 import java.util.List;
+
+import retrofit2.Call;
 
 public class IngredientsViewService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
 
-        int recipeId = intent.getIntExtra("recipe_id", -1);
-        final Recipe recipe = JsonUtils.findRecipe(getApplicationContext(), recipeId);
+        final int recipeId = intent.getIntExtra("recipe_id", -1);
 
         return new RemoteViewsFactory() {
+            Recipe recipe;
             @Override
             public void onCreate() {
 
@@ -38,7 +40,22 @@ public class IngredientsViewService extends RemoteViewsService {
 
             @Override
             public int getCount() {
-                if(recipe!=null) {
+                if(recipe==null) {
+                    GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+                    Call<List<Recipe>> call = service.getAllRecipes();
+                    List<Recipe> recipesList = null;
+                    try {
+                        recipesList = call.execute().body();
+                    } catch (IOException e) {
+                        return 0;
+                    }
+
+                    for(int i = 0; i < recipesList.size(); i++){
+                        Recipe currentRecipe = recipesList.get(i);
+                        if (currentRecipe.getId() == recipeId) {
+                            recipe = currentRecipe;
+                        }
+                    }
                     return recipe.getIngredients().size();
                 }
                 return 0;

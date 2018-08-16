@@ -1,17 +1,23 @@
 package org.swistowski.agata.givememycake.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.net.URL;
 
 public class Step implements java.io.Serializable{
 
-    private final int id;
+    @SerializedName("id")
+    private Integer id;
+    @SerializedName("shortDescription")
+    private String shortDescription;
+    @SerializedName("description")
+    private String description;
+    @SerializedName("videoURL")
+    private String video;
+    @SerializedName("thumbnailURL")
+    private String thumbnail;
 
-    private final String shortDescription;
-    private final String description;
-    private final URL video;
-    private final URL thumbnail;
-
-    public Step(int id, String shortDescription, String description, URL video, URL thumbnail) {
+    public Step(int id, String shortDescription, String description, String video, String thumbnail) {
         this.id = id;
         this.shortDescription = shortDescription;
         this.description = description;
@@ -31,11 +37,32 @@ public class Step implements java.io.Serializable{
         return description;
     }
 
-    public URL getVideo() {
+    public String getVideo() {
         return video;
     }
 
-    public URL getThumbnail() {
+    public String getThumbnail() {
         return thumbnail;
+    }
+
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

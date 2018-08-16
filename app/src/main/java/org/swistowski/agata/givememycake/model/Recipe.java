@@ -1,12 +1,17 @@
 package org.swistowski.agata.givememycake.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Recipe implements java.io.Serializable {
 
-    private final int id;
-    private final String name;
-    private final List<Ingredient> ingredients;
+    @SerializedName("id")
+    private Integer id;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("ingredients")
+    private List<Ingredient> ingredients;
 
 
     private final List<Step> steps;
@@ -43,5 +48,18 @@ public class Recipe implements java.io.Serializable {
 
     public List<Ingredient> getIngredients() {
         return ingredients;
+    }
+
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }

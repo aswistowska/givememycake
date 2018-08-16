@@ -1,10 +1,15 @@
 package org.swistowski.agata.givememycake.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Ingredient implements java.io.Serializable {
 
-    private final double quantity;
-    private final String measure;
-    private final String name;
+    @SerializedName("quantity")
+    private Double quantity;
+    @SerializedName("measure")
+    private String measure;
+    @SerializedName("ingredient")
+    private String name;
 
 
     public Ingredient(double quantity, String measure, String name) {
@@ -23,6 +28,19 @@ public class Ingredient implements java.io.Serializable {
 
     public String getName() {
         return name;
+    }
+
+
+    public void setQuantity(Double quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setMeasure(String measure) {
+        this.measure = measure;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

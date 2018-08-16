@@ -7,16 +7,26 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.widget.Toast;
 
 import org.swistowski.agata.givememycake.R;
 import org.swistowski.agata.givememycake.adapters.RecipesAdapter;
 import org.swistowski.agata.givememycake.helpers.GridSpacingItemDecoration;
 import org.swistowski.agata.givememycake.model.Recipe;
-import org.swistowski.agata.givememycake.utils.JsonUtils;
+import org.swistowski.agata.givememycake.network.GetDataService;
+import org.swistowski.agata.givememycake.network.RetrofitClientInstance;
+
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RecipeListActivity extends AppCompatActivity implements RecipesAdapter.RecipesAdapterOnClickHandler {
 
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.recipe_list_recycle_view) RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecipesAdapter mRecipesAdapter;
 
@@ -24,9 +34,8 @@ public class RecipeListActivity extends AppCompatActivity implements RecipesAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
+        ButterKnife.bind(this);
 
-        mRecyclerView = findViewById(R.id.recipe_list_recycle_view);
-        // mLayoutManager = new LinearLayoutManager(this);
         int spanCount = calculateNoOfColumns(this);
         mLayoutManager = new GridLayoutManager(this, spanCount);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -37,7 +46,21 @@ public class RecipeListActivity extends AppCompatActivity implements RecipesAdap
         mRecipesAdapter = new RecipesAdapter(this);
         mRecyclerView.setAdapter(mRecipesAdapter);
 
-        mRecipesAdapter.setRecipes(JsonUtils.parseRecipeJson(getResources().getString(R.string.recipesJson)));
+        //mRecipesAdapter.setRecipes(JsonUtils.parseRecipeJson(getResources().getString(R.string.recipesJson)));
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        Call<List<Recipe>> call = service.getAllRecipes();
+        call.enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                List<Recipe> recipesList = response.body();
+                mRecipesAdapter.setRecipes(recipesList);
+            }
+
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                Toast.makeText(RecipeListActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public static int calculateNoOfColumns(Context context) {
